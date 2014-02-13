@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Built-By: Julian
+Build-Jdk: 1.6.0_45
+Package: com.codeminders
+Main-Class: com.codeminders.controltower.ControlTower
+Created-By: Maven Integration for Eclipse
+
