@@ -37,19 +37,6 @@ public class MainActivity extends FragmentActivity implements TabListener {
 		for(String tabName : tabNames) {
 			actionBar.addTab(actionBar.newTab().setText(tabName).setTabListener(this));
 		}
-//		MenuItem item = (MenuItem) findViewById(R.id.action_connect);
-//		item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-//			
-//			@Override
-//			public boolean onMenuItemClick(MenuItem item) {
-//				if(item.getTitle().equals("Connect")) {
-//					item.setTitle("Disconnect");
-//				} else {
-//					item.setTitle("Connect");
-//				}
-//				return false;
-//			}
-//		});
 	}
 
 	
