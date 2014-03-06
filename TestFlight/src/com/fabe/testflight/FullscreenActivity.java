@@ -1,21 +1,16 @@
 package com.fabe.testflight;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 
-import com.codeminders.ardrone.ARDrone;
-import com.fabe.testflight.util.SystemUiHider;
-import com.fabe.testflight.R;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+
+import com.fabe.testflight.util.SystemUiHider;
 
 /* @see SystemUiHider */
 public class FullscreenActivity extends Activity 
@@ -33,6 +28,9 @@ public class FullscreenActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		setContentView(R.layout.activity_fullscreen);
 
 		//final View controlsView = findViewById(R.id.fullscreen_content_controls);
@@ -41,7 +39,7 @@ public class FullscreenActivity extends Activity
 		// Set up the user interaction to manually show or hide the system UI.
 		contentView.setOnClickListener(new View.OnClickListener() 
 		{public void onClick(View view) {}});
-
+			
 			// Upon interacting with UI controls, delay any scheduled hide()
 			// operations to prevent the jarring behavior of controls going away
 			// while interacting with the UI.

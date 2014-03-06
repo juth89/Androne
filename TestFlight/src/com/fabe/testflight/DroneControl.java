@@ -61,9 +61,13 @@ public class DroneControl implements DroneStatusChangeListener, NavDataListener{
 		}
 	}
 
+	
 	@Override
 	public void navDataReceived(NavData navData) {
 		System.out.println("Battery status: " + navData.getBattery());
 		System.out.println("Drone is flying: " + navData.isFlying());
 	}
+	
+	
+	
 }
