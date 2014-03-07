@@ -4,9 +4,7 @@ public enum DroneCommand {
 
 	TRIM,
 	CONNECT,
-	CONNECTED,
 	DISCONNECT,
-	DISCONNECTED,
 	TAKE_OFF,
 	LAND,
 	FORWARD,

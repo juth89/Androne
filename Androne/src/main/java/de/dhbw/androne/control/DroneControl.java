@@ -9,6 +9,7 @@ import com.codeminders.ardrone.ARDrone;
 import com.codeminders.ardrone.DroneStatusChangeListener;
 import com.codeminders.ardrone.NavData;
 import com.codeminders.ardrone.NavDataListener;
+import com.codeminders.ardrone.data.navdata.FlyingState;
 
 import de.dhbw.androne.view.MainActivity;
 
@@ -21,14 +22,18 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	private static final long CONNECT_TIMEOUT = 10000;
 	private static final long READ_UPDATE_DELAY_MS = 5;
 	
+	private boolean running = true;
 	private ARDrone drone;
+	private FlyingState flyingState;
+	private int battery;
+	private float altitude;
+	
 	private DroneCommand droneCommand;
 	private DirectDroneControl directDroneControl;
 	
 	
 	public DroneControl(MainActivity mainActivity) {
 		this.mainActivity = mainActivity;
-		droneCommand = DroneCommand.DISCONNECTED;
 
 		initDrone();
 		
@@ -111,68 +116,69 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	 */
 	@Override
 	public void run() {
-		while(true) {
-			switch(droneCommand) {
-			
-			case TRIM:
-				trimImpl();
-				break;
-				
-			case CONNECT:
-				connectImpl();
-				break;
-			
-			case CONNECTED:
-				break;
-				
-			case DISCONNECT:
-				disconnectImpl();
-				break;
-				
-			case DISCONNECTED:
-				break;
-				
-			case TAKE_OFF:
-				takeOffImpl();
-				break;
-			
-			case LAND:
-				landImpl();
-				break;
-				
-			case FORWARD:
-				directDroneControl.forward();
-				break;
-				
-			case BACKWARD:
-				directDroneControl.backward();
-				break;
-
-			case LEFT:
-				directDroneControl.left();
-				break;
-				
-			case RIGHT:
-				directDroneControl.right();
-				break;
-				
-			case UP:
-				directDroneControl.up();
-				break;
-				
-			case DOWN:
-				directDroneControl.down();
-				break;
-				
-			case ROTATE_LEFT:
-				directDroneControl.rotateLeft();
-				break;
-				
-			case ROTATE_RIGHT:
-				directDroneControl.rotateRight();
-				break;
+		while(running) {
+			mainActivity.setDroneStatus(drone.getState().name());
+			if(drone.getState() == ARDrone.State.DISCONNECTED) {
+				if(droneCommand == DroneCommand.CONNECT) {
+					connectImpl();
+				}
 			}
-	
+			if(drone.getState() == ARDrone.State.CONNECTING) {
+				// do nothing
+			}
+			if(drone.getState() == ARDrone.State.TAKING_OFF) {
+				// do nothing
+			}
+			if(drone.getState() == ARDrone.State.LANDING) {
+				// do nothing
+			}
+			if(drone.getState() == ARDrone.State.DEMO) {
+				if(flyingState == FlyingState.FLYING) {
+					if(droneCommand == DroneCommand.TRIM) {
+						trimImpl();
+					}
+					if(droneCommand == DroneCommand.FORWARD) {
+						directDroneControl.forward();
+					}
+					if(droneCommand == DroneCommand.BACKWARD) {
+						directDroneControl.backward();
+					}
+					if(droneCommand == DroneCommand.LEFT) {
+						directDroneControl.left();
+					}
+					if(droneCommand == DroneCommand.RIGHT) {
+						directDroneControl.right();
+					}
+					if(droneCommand == DroneCommand.UP) {
+						directDroneControl.up();
+					}
+					if(droneCommand == DroneCommand.DOWN) {
+						directDroneControl.down();
+					}
+					if(droneCommand == DroneCommand.ROTATE_LEFT) {
+						directDroneControl.rotateLeft();
+					}
+					if(droneCommand == DroneCommand.ROTATE_RIGHT) {
+						directDroneControl.rotateRight();
+					}
+					
+					if(droneCommand == DroneCommand.DISCONNECT) {
+						landImpl();
+						disconnectImpl();
+					}
+				}
+				if(flyingState == FlyingState.LANDED) {
+					if(droneCommand == DroneCommand.DISCONNECT) {
+						disconnectImpl();
+					}
+					if(droneCommand == DroneCommand.TAKE_OFF) {
+						takeOffImpl();
+					}
+				}
+			}
+			if(drone.getState() == ARDrone.State.ERROR) {
+			}
+			
 			Log.e(TAG, droneCommand.name());
 			
 			try {
@@ -181,6 +187,11 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 				Log.e(TAG, "Thread sleep exception", e);
 			}
 		}
+	}
+	
+	
+	public void stopThread() {
+		running = false;
 	}
 
 
@@ -217,13 +228,10 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
             drone.clearEmergencySignal();
 
             mainActivity.showToast("Successfully connected!");
-            droneCommand = DroneCommand.CONNECTED;
 		} catch(IOException e) {
 			Log.e(TAG, "CONNECT", e);
 			mainActivity.setConnectButtonTitle("Connect");
-			mainActivity.setDroneStatus("Disconnected");
 			mainActivity.showToast("Unable to connect to drone!");
-			droneCommand = DroneCommand.DISCONNECTED;
 		}
 	}
 	
@@ -233,11 +241,9 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 			drone.disconnect();
 			
 			mainActivity.showToast("Successfully disconnected!");
-			droneCommand = DroneCommand.DISCONNECTED;
 		} catch (IOException e) {
 			Log.e(TAG, "DISCONNECT", e);
 			mainActivity.setConnectButtonTitle("Disconnect");
-			mainActivity.setDroneStatus("Connected");
 			mainActivity.showToast("Unable to disconnect from drone");
 		}
 	}
@@ -246,12 +252,9 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	private void takeOffImpl() {
 		try {
 			drone.takeOff();
-			Thread.sleep(3000);
 			droneCommand = DroneCommand.TRIM;
 		} catch (IOException e) {
 			Log.e(TAG, "Unable to take off", e);
-		} catch (InterruptedException e) {
-			Log.e(TAG, "Unable to sleep", e);
 		}
 	}
 	
@@ -259,12 +262,8 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	private void landImpl() {
 		try {
 			drone.land();
-			Thread.sleep(3000);
-			droneCommand = DroneCommand.CONNECTED;
 		} catch (IOException e) {
 			Log.e(TAG, "Unable to land", e);
-		} catch (InterruptedException e) {
-			Log.e(TAG, "Unable to sleep", e);
 		}
 	}
 	
@@ -273,7 +272,12 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	 */
 	@Override
 	public void navDataReceived(NavData nd) {
+		flyingState = nd.getFlyingState();
+		battery = nd.getBattery();
+		altitude = nd.getAltitude();
 		
+		mainActivity.setBattery(battery);
+		mainActivity.setAltitude(altitude);
 	}
 
 	

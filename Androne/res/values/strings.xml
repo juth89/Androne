@@ -8,6 +8,7 @@
     <string name="action_disconnect">Disconnect</string>
     <string name="action_take_off">Take Off</string>
     <string name="action_land">Land</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="battery">Battery: 0 %</string>
+    <string name="altitude">Altitude: 0 m</string>
 
 </resources>

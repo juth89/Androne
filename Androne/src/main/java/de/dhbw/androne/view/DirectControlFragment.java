@@ -2,23 +2,27 @@ package de.dhbw.androne.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import de.dhbw.androne.control.DroneControl;
 
 public class DirectControlFragment extends Fragment implements OnTouchListener {
 
+	public static DirectControlFragment INSTANCE;
+	
 	private DroneControl droneControl;
 	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
 		View rootView = inflater.inflate(R.layout.fragment_direct_control, container, false);
+		
+		INSTANCE = this;
 		
 		droneControl = ((MainActivity)getActivity()).getDroneControl();
 
@@ -70,5 +74,17 @@ public class DirectControlFragment extends Fragment implements OnTouchListener {
 			}
 		}
 		return false;
+	}
+	
+	
+	public void setBattery(int battery) {
+		TextView batteryTextView = (TextView)getView().findViewById(R.id.textViewBattery);
+		batteryTextView.setText("Battery: " + battery + " %");
+	}
+	
+	
+	public void setAltitude(float altitude) {
+		TextView altitudeTextView = (TextView)getView().findViewById(R.id.textViewAltitude);
+		altitudeTextView.setText("Altitude: " + altitude + " m");
 	}
 }
