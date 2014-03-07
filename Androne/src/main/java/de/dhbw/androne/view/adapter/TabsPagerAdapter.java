@@ -1,11 +1,11 @@
 package de.dhbw.androne.view.adapter;
 
-import de.dhbw.androne.view.DirectControlFragment;
-import de.dhbw.androne.view.PolygonControlFragment;
-import de.dhbw.androne.view.ShapeControlFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import de.dhbw.androne.view.DirectControlFragment;
+import de.dhbw.androne.view.PolygonControlFragment;
+import de.dhbw.androne.view.ShapeControlFragment;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
