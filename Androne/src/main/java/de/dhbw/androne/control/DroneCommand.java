@@ -2,6 +2,7 @@ package de.dhbw.androne.control;
 
 public enum DroneCommand {
 
+	DISCONNECTED,
 	TRIM,
 	CONNECT,
 	DISCONNECT,

@@ -28,7 +28,7 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	private int battery;
 	private float altitude;
 	
-	private DroneCommand droneCommand;
+	private DroneCommand droneCommand = DroneCommand.DISCONNECTED;
 	private DirectDroneControl directDroneControl;
 	
 	
@@ -230,6 +230,8 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
             mainActivity.showToast("Successfully connected!");
 		} catch(IOException e) {
 			Log.e(TAG, "CONNECT", e);
+			droneCommand = DroneCommand.DISCONNECTED;
+			initDrone();
 			mainActivity.setConnectButtonTitle("Connect");
 			mainActivity.showToast("Unable to connect to drone!");
 		}
