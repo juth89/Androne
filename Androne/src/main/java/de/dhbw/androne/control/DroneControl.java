@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import android.util.Log;
 
 import com.codeminders.ardrone.ARDrone;
+import com.codeminders.ardrone.ARDrone.State;
 import com.codeminders.ardrone.DroneStatusChangeListener;
 import com.codeminders.ardrone.NavData;
 import com.codeminders.ardrone.NavDataListener;
@@ -117,7 +118,6 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	@Override
 	public void run() {
 		while(running) {
-			mainActivity.setDroneStatus(drone.getState().name());
 			if(drone.getState() == ARDrone.State.DISCONNECTED) {
 				if(droneCommand == DroneCommand.CONNECT) {
 					connectImpl();
@@ -162,6 +162,10 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 						directDroneControl.rotateRight();
 					}
 					
+					if(droneCommand == DroneCommand.LAND) {
+						landImpl();
+					}
+					
 					if(droneCommand == DroneCommand.DISCONNECT) {
 						landImpl();
 						disconnectImpl();
@@ -179,7 +183,8 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 			if(drone.getState() == ARDrone.State.ERROR) {
 			}
 			
-			Log.e(TAG, droneCommand.name());
+//			Log.e(TAG, droneCommand.name());
+			mainActivity.updateDroneUi();
 			
 			try {
 				Thread.sleep(READ_UPDATE_DELAY_MS);
@@ -201,6 +206,7 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	private void trimImpl() {
 		try {
 			drone.trim();
+			directDroneControl.stay();
 		} catch (IOException e) {
 			Log.e(TAG, "TRIM", e);
 		}
@@ -227,13 +233,10 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 			drone.waitForReady(CONNECT_TIMEOUT);
             drone.clearEmergencySignal();
 
-            mainActivity.showToast("Successfully connected!");
 		} catch(IOException e) {
 			Log.e(TAG, "CONNECT", e);
 			droneCommand = DroneCommand.DISCONNECTED;
 			initDrone();
-			mainActivity.setConnectButtonTitle("Connect");
-			mainActivity.showToast("Unable to connect to drone!");
 		}
 	}
 	
@@ -242,11 +245,8 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 		try {
 			drone.disconnect();
 			
-			mainActivity.showToast("Successfully disconnected!");
 		} catch (IOException e) {
 			Log.e(TAG, "DISCONNECT", e);
-			mainActivity.setConnectButtonTitle("Disconnect");
-			mainActivity.showToast("Unable to disconnect from drone");
 		}
 	}
 	
@@ -264,8 +264,11 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 	private void landImpl() {
 		try {
 			drone.land();
+			Thread.sleep(5000);
 		} catch (IOException e) {
 			Log.e(TAG, "Unable to land", e);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -277,15 +280,32 @@ public class DroneControl implements Runnable, DroneStatusChangeListener, NavDat
 		flyingState = nd.getFlyingState();
 		battery = nd.getBattery();
 		altitude = nd.getAltitude();
-		
-		mainActivity.setBattery(battery);
-		mainActivity.setAltitude(altitude);
 	}
 
 	
 	@Override
 	public void ready() {
-		mainActivity.setDroneStatus("Connected");
+		mainActivity.updateDroneUi();
+	}
+	
+	
+	public State getState() {
+		return drone.getState();
+	}
+	
+	
+	public FlyingState getFlyingState() {
+		return flyingState;
+	}
+	
+	
+	public float getAltitude() {
+		return altitude;
+	}
+	
+	
+	public int getBattery() {
+		return battery;
 	}
 
 }

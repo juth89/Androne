@@ -94,4 +94,14 @@ public class DirectDroneControl {
 			Log.e(TAG, "Rotate right problem", e);
 		}
 	}
+	
+	
+	public void stay() {
+		try {
+			drone.move(0, 0, 0, 0);
+			drone.hover();
+		} catch (IOException e) {
+			Log.e(TAG, "Stay problem", e);
+		}
+	}
 }

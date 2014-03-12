@@ -9,6 +9,9 @@ import de.dhbw.androne.view.ShapeControlFragment;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
+	private Fragment dcFragment, scFragment, pcFragment;
+	private int currentIndex;
+	
 	public TabsPagerAdapter(FragmentManager fm) {
 		super(fm);
 	}
@@ -17,11 +20,14 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int index) {
 		switch (index) {
 		case 0:
-			return new DirectControlFragment();
+			dcFragment = new DirectControlFragment();
+			return dcFragment;
 		case 1:
-			return new ShapeControlFragment();
+			scFragment = new ShapeControlFragment();
+			return scFragment;
 		case 2:
-			return new PolygonControlFragment();
+			pcFragment = new PolygonControlFragment();
+			return pcFragment;
 		default:
 			return null;
 		}
@@ -32,4 +38,22 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		return 3;
 	}
 
+	
+	public void setCurrentIndex(int index) {
+		currentIndex = index;
+	}
+	
+	
+	public Fragment getCurrentFragment() {
+		switch(currentIndex) {
+		case 0:
+			return dcFragment;
+		case 1:
+			return scFragment;
+		case 2:
+			return pcFragment;
+		default:
+			return null;
+		}
+	}
 }

@@ -15,6 +15,7 @@ public class NonSwipeableViewPager extends ViewPager {
 		super(context, attrs);
 	}
 
+	
 	// Override for non swipe
     @Override
     public boolean onInterceptTouchEvent(MotionEvent arg0) {

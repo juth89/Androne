@@ -1,7 +1,9 @@
 package de.dhbw.androne.view;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,12 +13,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import de.dhbw.androne.control.DroneControl;
 
-public class DirectControlFragment extends Fragment implements OnTouchListener {
+public class DirectControlFragment extends Fragment implements OnTouchListener, DroneUpdater {
 
 	public static DirectControlFragment INSTANCE;
 	
 	private DroneControl droneControl;
-	
+	private TextView textViewAltitude, textViewState, textViewBattery;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
@@ -34,6 +36,14 @@ public class DirectControlFragment extends Fragment implements OnTouchListener {
 		((ImageButton)rootView.findViewById(R.id.button_direct_down)).setOnTouchListener(this);
 		((ImageButton)rootView.findViewById(R.id.button_direct_rotate_left)).setOnTouchListener(this);
 		((ImageButton)rootView.findViewById(R.id.button_direct_rotate_right)).setOnTouchListener(this);
+		
+		textViewAltitude = (TextView)rootView.findViewById(R.id.text_view_altitude);
+		textViewState = (TextView)rootView.findViewById(R.id.text_view_state);
+		textViewBattery = (TextView)rootView.findViewById(R.id.text_view_battery);
+		
+		setAltitude(0);
+		setState("Disconnected");
+		setBattery(0);
 		
 		return rootView;
 	}
@@ -76,15 +86,21 @@ public class DirectControlFragment extends Fragment implements OnTouchListener {
 		return false;
 	}
 	
-	
-	public void setBattery(int battery) {
-		TextView batteryTextView = (TextView)getView().findViewById(R.id.textViewBattery);
-		batteryTextView.setText("Battery: " + battery + " %");
+	@Override
+	public void setAltitude(float altitude) {
+		String text = getResources().getString(R.string.text_view_altitude);
+		textViewAltitude.setText(text + " " + altitude + " m");
+	}
+
+	@Override
+	public void setState(String state) {
+		String text = getResources().getString(R.string.text_view_state);
+		textViewState.setText(text + " " +state);
 	}
 	
-	
-	public void setAltitude(float altitude) {
-		TextView altitudeTextView = (TextView)getView().findViewById(R.id.textViewAltitude);
-		altitudeTextView.setText("Altitude: " + altitude + " m");
+	@Override
+	public void setBattery(int battery) {
+		String text = getResources().getString(R.string.text_view_battery);
+		textViewBattery.setText(text + " " + battery + " %");
 	}
 }

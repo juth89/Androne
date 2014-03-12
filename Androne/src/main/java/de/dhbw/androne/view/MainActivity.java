@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.codeminders.ardrone.ARDrone.State;
+
 import de.dhbw.androne.control.DroneControl;
 import de.dhbw.androne.view.adapter.TabsPagerAdapter;
 import de.dhbw.androne.view.viewpager.NonSwipeableViewPager;
@@ -23,6 +26,8 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	private String[] tabNames = { "Direct", "Shape", "Polygon" };
 	
 	private DroneControl droneControl;
+	
+	private UiUpdater uiUpdater;
 	
 	
 	@Override
@@ -46,6 +51,8 @@ public class MainActivity extends FragmentActivity implements TabListener {
 		droneControl = new DroneControl(this);
 		Thread droneControlThread = new Thread(droneControl);
 		droneControlThread.start();
+		
+		uiUpdater = new UiUpdater(tabsPagerAdapter, droneControl);
 	}
 
 	
@@ -53,6 +60,7 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		this.menu = menu;
+		uiUpdater.setMenu(menu);
 		return true;
 	}
 	
@@ -61,31 +69,19 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()){
 		case R.id.action_connect:
-
-			if(item.getTitle().equals("Connect")) {
-				item.setTitle(R.string.action_disconnect);
-				setDroneStatus("Connecting...");
+			if(item.getTitle().equals(getResources().getString(R.string.action_connect))) {
 				droneControl.connect();
-				
 			} else {
-				item.setTitle(R.string.action_connect);
-				setDroneStatus("Disconnecting...");
 				droneControl.disconnect();
 			}
-			
 			return false;
 			
 		case R.id.action_take_off:
-			
-			if(item.getTitle().equals("Take Off")) {
-				item.setTitle(R.string.action_land);
+			if(item.getTitle().equals(getResources().getString(R.string.action_take_off))) {
 				droneControl.takeOff();
 			} else {
-				item.setTitle(R.string.action_take_off);
 				droneControl.land();
 			}
-					
-
 			return false;
 			
 		case R.id.action_settings:
@@ -99,24 +95,11 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	}
 
 	
-	public void setDroneStatus(final String status) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				actionBar.setSubtitle("Status: " + status);
-			}
-		});
-	}
-	
-	
-	public void setConnectButtonTitle(final String title) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				MenuItem menuItem = menu.getItem(0);
-				menuItem.setTitle(title);
-			}
-		});
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		uiUpdater.updateMenu();
+		return true;
 	}
 	
 	
@@ -138,7 +121,7 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction transaction) {
 		viewPager.setCurrentItem(tab.getPosition());
-		
+		tabsPagerAdapter.setCurrentIndex(tab.getPosition());
 	}
 
 	@Override
@@ -153,23 +136,13 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	public DroneControl getDroneControl() {
 		return droneControl;
 	}
+
 	
-	
-	public void setBattery(final int battery) {
+	public void updateDroneUi() {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				((DirectControlFragment)tabsPagerAdapter.getItem(0)).setBattery(battery);
-			}
-		});
-	}
-	
-	
-	public void setAltitude(final float altitude) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				((DirectControlFragment)tabsPagerAdapter.getItem(0)).setAltitude(altitude);
+				uiUpdater.updateDrone();
 			}
 		});
 	}
