@@ -103,6 +103,13 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	}
 	
 	
+	@Override
+	public void onDestroy() {
+		droneControl.stopThread();
+		super.onDestroy();
+	}
+	
+	
 	public void showToast(final String toastMessage) {
 		runOnUiThread(new Runnable() {
 			@Override
@@ -128,6 +135,10 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	public void onTabUnselected(Tab tab, FragmentTransaction transaction) {
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+	}
 	
 	/**
 	 * Getter and setter

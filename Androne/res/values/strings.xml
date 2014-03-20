@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Activity strings -->
     <string name="app_name">Androne</string>
-    <string name="hello">Hello Androne!</string>
     <string name="action_settings">Settings</string>
     <string name="action_connect">Connect</string>
     <string name="action_disconnect">Disconnect</string>
     <string name="action_take_off">Take Off</string>
     <string name="action_land">Land</string>
+    
+    <!-- Status strings -->
     <string name="text_view_battery">Battery: </string>
     <string name="text_view_state">State: </string>
     <string name="text_view_altitude">Altitude: </string>
 
+    <!-- Fragment shape strings -->
+    <string name="shape_width_text">Width / m:</string>
+    <string name="shape_height_text">Height / m:</string>
 </resources>

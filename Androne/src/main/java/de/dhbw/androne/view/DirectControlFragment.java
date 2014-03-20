@@ -88,18 +88,27 @@ public class DirectControlFragment extends Fragment implements OnTouchListener, 
 	
 	@Override
 	public void setAltitude(float altitude) {
+		if(!isVisible()) {
+			return;
+		}
 		String text = getResources().getString(R.string.text_view_altitude);
 		textViewAltitude.setText(text + " " + altitude + " m");
 	}
 
 	@Override
 	public void setState(String state) {
+		if(!isVisible()) {
+			return;
+		}
 		String text = getResources().getString(R.string.text_view_state);
 		textViewState.setText(text + " " +state);
 	}
 	
 	@Override
 	public void setBattery(int battery) {
+		if(!isVisible()) {
+			return;
+		}
 		String text = getResources().getString(R.string.text_view_battery);
 		textViewBattery.setText(text + " " + battery + " %");
 	}

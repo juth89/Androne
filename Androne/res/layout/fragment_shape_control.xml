@@ -35,59 +35,66 @@
         android:layout_marginTop="10dp"
         android:text="@string/text_view_battery" />
 
+
+    <LinearLayout 
+        android:id="@+id/shape_control_panel"
+        android:orientation="vertical"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_centerVertical="true">
+        
+        
+        <Button 
+            android:id="@+id/shape_button_set_width_height"
+            android:text="Set"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"/>
+
+        <Button 
+            android:id="@+id/shape_button_start"
+            android:text="Start"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+        
+    </LinearLayout>
+    
+    
     <de.dhbw.androne.view.shape.ShapeView
         android:id="@+id/surface_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp" >
-
-        <TextView 
-            android:text="Width: "
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center"/>
-        
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp" >
-
-        <TextView 
-            android:text="Height: "
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center"/>
-        
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+        android:layout_margin="10dp"
+        android:layout_below="@id/text_view_altitude"
+        android:layout_toRightOf="@id/shape_control_panel" />
     
-    <Button 
-        android:text="Start"
+<!--     
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/text_view_altitude"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginLeft="10dp">
+
+        <Button 
+            android:id="@+id/shape_button_set_width_height"
+            android:text="Set ..."
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"/>
+
+        <Button 
+            android:id="@+id/shape_button_start"
+            android:text="Start"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"/>
+        
+        
+    </RelativeLayout>
+ -->
     
 </RelativeLayout>
