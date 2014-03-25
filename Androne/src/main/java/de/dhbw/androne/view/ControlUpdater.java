@@ -1,5 +1,7 @@
 package de.dhbw.androne.view;
 
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -9,14 +11,14 @@ import com.codeminders.ardrone.data.navdata.FlyingState;
 import de.dhbw.androne.control.DroneControl;
 import de.dhbw.androne.view.adapter.TabsPagerAdapter;
 
-public class UiUpdater {
+public class ControlUpdater {
 
 	private MenuItem connectItem, takeOffItem;
 	private DroneControl droneControl;
 	private TabsPagerAdapter tabsPagerAdapter;
 
 
-	public UiUpdater(TabsPagerAdapter tabsPagerAdapter, DroneControl droneControl) {
+	public ControlUpdater(TabsPagerAdapter tabsPagerAdapter, DroneControl droneControl) {
 		this.tabsPagerAdapter = tabsPagerAdapter;
 		this.droneControl = droneControl;
 	}
@@ -84,13 +86,19 @@ public class UiUpdater {
 	
 	
 	public void updateDrone() {
-		DroneUpdater droneUpdater = (DroneUpdater) tabsPagerAdapter.getCurrentFragment();
+		Fragment currentFragment = tabsPagerAdapter.getCurrentFragment();
+		ControlFragment controlFragment = null;
+
+		if(currentFragment instanceof ControlFragment) {
+			controlFragment = (ControlFragment) currentFragment;
+		}
 		
-		if(null == droneUpdater) {
+		if(null == controlFragment || !currentFragment.isVisible()) {
 			return;
 		}
-		droneUpdater.setAltitude(droneControl.getAltitude());
-		droneUpdater.setState(droneControl.getState().toString());
-		droneUpdater.setBattery(droneControl.getBattery());
+		
+		controlFragment.setAltitude(droneControl.getAltitude());
+		controlFragment.setState(droneControl.getState().toString());
+		controlFragment.setBattery(droneControl.getBattery());
 	}
 }

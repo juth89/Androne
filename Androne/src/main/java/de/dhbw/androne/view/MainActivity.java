@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	
 	private DroneControl droneControl;
 	
-	private UiUpdater uiUpdater;
+	private ControlUpdater uiUpdater;
 	
 	
 	@Override
@@ -52,7 +52,7 @@ public class MainActivity extends FragmentActivity implements TabListener {
 		Thread droneControlThread = new Thread(droneControl);
 		droneControlThread.start();
 		
-		uiUpdater = new UiUpdater(tabsPagerAdapter, droneControl);
+		uiUpdater = new ControlUpdater(tabsPagerAdapter, droneControl);
 	}
 
 	

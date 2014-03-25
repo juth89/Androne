@@ -6,9 +6,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
+import android.view.View;
 import de.dhbw.androne.view.ShapeControlFragment;
 
-public abstract class ValuePickerDialog extends DialogFragment {
+public abstract class ValuePicker extends DialogFragment {
 	
 	private static final String POSITIVE_BUTTON_TEXT = "Set";
 	private static final String NEGATIVE_BUTTON_TEXT = "Cancel";
@@ -43,13 +44,14 @@ public abstract class ValuePickerDialog extends DialogFragment {
 		
 		inflater = getActivity().getLayoutInflater();
 		
-		createDialog();
+		View view = createDialog();
+		builder.setView(view);
 		
 		return builder.create();
 	}
 	
 	
-	protected abstract void createDialog();
+	protected abstract View createDialog();
 	
 	protected abstract void positiveOnClick();
 

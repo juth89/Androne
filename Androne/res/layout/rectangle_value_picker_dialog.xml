@@ -6,22 +6,22 @@
     android:paddingRight="30dp">
 
     <TextView
-        android:id="@+id/fragment_shape_width_text_view"
-        android:text="@string/shape_width_text" 
+        android:id="@+id/shape_rect_tri_angle_width_text_view"
+        android:text="@string/shape_rect_tri_angle_width_text" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:paddingRight="10dp"/>
     
     <NumberPicker
-        android:id="@+id/fragment_shape_width_picker"
+        android:id="@+id/shape_rect_tri_angle_width_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/fragment_shape_width_text_view"
+        android:layout_toRightOf="@id/shape_rect_tri_angle_width_text_view"
         android:layout_centerVertical="true"/>
     
     <NumberPicker
-        android:id="@+id/fragment_shape_height_picker"
+        android:id="@+id/shape_rect_tri_angle_height_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -29,11 +29,11 @@
 
 
     <TextView
-        android:id="@+id/fragment_shape_height_text_view"
-        android:text="@string/shape_height_text" 
+        android:id="@+id/shape_rect_tri_angle_height_text_view"
+        android:text="@string/shape_rect_tri_angle_height_text" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/fragment_shape_height_picker"
+        android:layout_toLeftOf="@id/shape_rect_tri_angle_height_picker"
         android:layout_centerVertical="true"
         android:paddingRight="10dp"/>
 </RelativeLayout>

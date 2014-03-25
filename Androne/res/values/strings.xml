@@ -15,6 +15,16 @@
     <string name="text_view_altitude">Altitude: </string>
 
     <!-- Fragment shape strings -->
-    <string name="shape_width_text">Width / m:</string>
-    <string name="shape_height_text">Height / m:</string>
+    <string name="shape_prompt">Choose a shape</string>
+    <string-array name="shape_chooser">
+        <item>Rectangle</item>
+        <item>Triangle</item>
+        <item>Circle</item>
+    </string-array>
+    <string name="shape_button_set">Set ...</string>
+    <string name="shape_button_start">Start</string>
+    <string name="shape_check_change_direction">Change direction</string>
+    <string name="shape_rect_tri_angle_width_text">Width / m:</string>
+    <string name="shape_rect_tri_angle_height_text">Height / m:</string>
+    <string name="shape_circle_radius_text">Radius / m:</string>
 </resources>

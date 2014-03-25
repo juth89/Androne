@@ -35,66 +35,68 @@
         android:layout_marginTop="10dp"
         android:text="@string/text_view_battery" />
 
-
-    <LinearLayout 
+    <LinearLayout
         android:id="@+id/shape_control_panel"
-        android:orientation="vertical"
-        android:layout_width="80dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/text_view_altitude"
         android:layout_margin="10dp"
-        android:layout_centerVertical="true">
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical" >
         
+        <Spinner
+            android:id="@+id/shape_chooser"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/shape_chooser"
+            android:layout_marginBottom="20dp" />
+        
+        <CheckBox 
+            android:id="@+id/shape_check_change_direction"
+            android:text="@string/shape_check_change_direction"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"/>
         
         <Button 
-            android:id="@+id/shape_button_set_width_height"
-            android:text="Set"
+            android:id="@+id/shape_button_show_value_picker"
+            android:text="@string/shape_button_set"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"/>
 
         <Button 
             android:id="@+id/shape_button_start"
-            android:text="Start"
+            android:text="@string/shape_button_start"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
         
     </LinearLayout>
     
     
-    <de.dhbw.androne.view.shape.ShapeView
-        android:id="@+id/surface_view"
+    <de.dhbw.androne.view.shape.CircleShapeView
+        android:id="@+id/circle_shape_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_below="@id/text_view_altitude"
+        android:layout_toRightOf="@id/shape_control_panel" />
+
+    <de.dhbw.androne.view.shape.TriangleShapeView
+        android:id="@+id/triangle_shape_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_below="@id/text_view_altitude"
         android:layout_toRightOf="@id/shape_control_panel" />
     
-<!--     
-    <RelativeLayout
+    <de.dhbw.androne.view.shape.RectangleShapeView
+        android:id="@+id/rectangle_shape_view"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_below="@id/text_view_altitude"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp">
-
-        <Button 
-            android:id="@+id/shape_button_set_width_height"
-            android:text="Set ..."
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"/>
-
-        <Button 
-            android:id="@+id/shape_button_start"
-            android:text="Start"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
-        
-        
-    </RelativeLayout>
- -->
+        android:layout_toRightOf="@id/shape_control_panel" />
     
 </RelativeLayout>
