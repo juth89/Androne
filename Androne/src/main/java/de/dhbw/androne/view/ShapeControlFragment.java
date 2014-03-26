@@ -11,14 +11,15 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
+import de.dhbw.androne.control.values.DroneCommand;
 import de.dhbw.androne.view.shape.CircleShapeView;
-import de.dhbw.androne.view.shape.CircleValuePicker;
 import de.dhbw.androne.view.shape.RectangleShapeView;
-import de.dhbw.androne.view.shape.RectangleValuePicker;
 import de.dhbw.androne.view.shape.ShapeView;
 import de.dhbw.androne.view.shape.TriangleShapeView;
-import de.dhbw.androne.view.shape.TriangleValuePicker;
-import de.dhbw.androne.view.shape.ValuePicker;
+import de.dhbw.androne.view.shape.valuepicker.CircleValuePicker;
+import de.dhbw.androne.view.shape.valuepicker.RectangleValuePicker;
+import de.dhbw.androne.view.shape.valuepicker.TriangleValuePicker;
+import de.dhbw.androne.view.shape.valuepicker.ValuePicker;
 
 public class ShapeControlFragment extends ControlFragment implements OnClickListener, OnItemSelectedListener, OnCheckedChangeListener {
 
@@ -32,6 +33,9 @@ public class ShapeControlFragment extends ControlFragment implements OnClickList
 	private TriangleValuePicker triangleValuePicker;
 	private CircleValuePicker circleValuePicker;
 
+	private Spinner shapeChooser;
+	private Button startButton, showValuePicker;
+	private CheckBox checkChangeDirection;
 	
 
 	@Override
@@ -53,14 +57,17 @@ public class ShapeControlFragment extends ControlFragment implements OnClickList
 		circleValuePicker.setShapeControlFragment(this);
 		circleValuePicker.setShapeView(circleShapeView);
 		
-		Spinner shapeChooser = (Spinner)view.findViewById(R.id.shape_chooser);
+		shapeChooser = (Spinner)view.findViewById(R.id.shape_chooser);
 		shapeChooser.setOnItemSelectedListener(this);
 		
-		CheckBox checkChangeDirection = (CheckBox)view.findViewById(R.id.shape_check_change_direction);
+		checkChangeDirection = (CheckBox)view.findViewById(R.id.shape_check_change_direction);
 		checkChangeDirection.setOnCheckedChangeListener(this);
 
-		Button showValuePicker = (Button)view.findViewById(R.id.shape_button_show_value_picker);
+		showValuePicker = (Button)view.findViewById(R.id.shape_button_show_value_picker);
 		showValuePicker.setOnClickListener(this);
+	
+		startButton = (Button)view.findViewById(R.id.shape_button_start);
+		startButton.setOnClickListener(this);
 		
 		return view;
 	}
@@ -70,6 +77,9 @@ public class ShapeControlFragment extends ControlFragment implements OnClickList
 	public void onClick(View v) {
 		if(v.getId() == R.id.shape_button_show_value_picker) {
 			currentValuePicker.show(getFragmentManager(), null);
+		} else if(v.getId() == R.id.shape_button_start) {
+			droneController.setShape(currentShapeView.getShape());
+			droneController.setCommand(DroneCommand.FLY_CURRENT_SHAPE);
 		}
 	}
 	
@@ -118,6 +128,25 @@ public class ShapeControlFragment extends ControlFragment implements OnClickList
 		triangleShapeView.setDirection(value);
 		circleShapeView.setDirection(value);
 	}
-
-
+	
+	
+	public void disableStartButton() {
+		startButton.setEnabled(false);
+	}
+	
+	
+	public void enableAll() {
+		shapeChooser.setEnabled(true);
+		checkChangeDirection.setEnabled(true);
+		showValuePicker.setEnabled(true);
+		startButton.setEnabled(true);
+	}
+	
+	
+	public void disableAll() {
+		shapeChooser.setEnabled(false);
+		checkChangeDirection.setEnabled(false);
+		showValuePicker.setEnabled(false);
+		startButton.setEnabled(false);
+	}
 }

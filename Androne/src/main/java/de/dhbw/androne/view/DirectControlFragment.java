@@ -1,27 +1,37 @@
 package de.dhbw.androne.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import de.dhbw.androne.control.values.DroneCommand;
 
 public class DirectControlFragment extends ControlFragment implements OnTouchListener {
 
+	private List<ImageButton> buttons = new ArrayList<ImageButton>();
+	
 	
 	@Override
 	protected View createView(LayoutInflater inflater, ViewGroup container) {
 		View view = inflater.inflate(R.layout.fragment_direct_control, container, false);
 		
-		((ImageButton)view.findViewById(R.id.direct_button_forward)).setOnTouchListener(this);
-		((ImageButton)view.findViewById(R.id.direct_button_backward)).setOnTouchListener(this);
-		((ImageButton)view.findViewById(R.id.direct_button_left)).setOnTouchListener(this);
-		((ImageButton)view.findViewById(R.id.direct_button_right)).setOnTouchListener(this);
-		((ImageButton)view.findViewById(R.id.direct_button_up)).setOnTouchListener(this);
-		((ImageButton)view.findViewById(R.id.direct_button_down)).setOnTouchListener(this);
-		((ImageButton)view.findViewById(R.id.direct_button_rotate_left)).setOnTouchListener(this);
-		((ImageButton)view.findViewById(R.id.direct_button_rotate_right)).setOnTouchListener(this);
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_forward));
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_backward));
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_left));
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_right));
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_up));
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_down));
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_rotate_left));
+		buttons.add((ImageButton)view.findViewById(R.id.direct_button_rotate_right));
+		
+		for(ImageButton button : buttons) {
+			button.setOnTouchListener(this);
+		}
 		
 		return view;
 	}
@@ -30,38 +40,52 @@ public class DirectControlFragment extends ControlFragment implements OnTouchLis
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		if(event.getAction() == MotionEvent.ACTION_UP) {
-			droneControl.trim();
+			droneController.setCommand(DroneCommand.TRIM);
 		}
 		
 		if(event.getAction() == MotionEvent.ACTION_DOWN) {
 			switch(v.getId()){
 			case R.id.direct_button_forward:
-				droneControl.forward();
+				droneController.setCommand(DroneCommand.FORWARD);
 				break;
 			case R.id.direct_button_backward:
-				droneControl.backward();
+				droneController.setCommand(DroneCommand.BACKWARD);
 				break;
 			case R.id.direct_button_left:
-				droneControl.left();
+				droneController.setCommand(DroneCommand.LEFT);
 				break;
 			case R.id.direct_button_right:
-				droneControl.right();
+				droneController.setCommand(DroneCommand.RIGHT);
 				break;
 			case R.id.direct_button_up:
-				droneControl.up();
+				droneController.setCommand(DroneCommand.UP);
 				break;
 			case R.id.direct_button_down:
-				droneControl.down();
+				droneController.setCommand(DroneCommand.DOWN);
 				break;
 			case R.id.direct_button_rotate_left:
-				droneControl.rotateLeft();
+				droneController.setCommand(DroneCommand.ROTATE_LEFT);
 				break;
 			case R.id.direct_button_rotate_right:
-				droneControl.rotateRight();
+				droneController.setCommand(DroneCommand.ROTATE_RIGHT);
 				break;
 			}
 		}
 		return false;
 	}
 
+	
+	public void enableAll() {
+		for(ImageButton button : buttons) {
+			button.setEnabled(true);
+		}
+	}
+	
+	
+	public void disableAll() {
+		for(ImageButton button : buttons) {
+			button.setEnabled(false);
+		}
+		
+	}
 }

@@ -1,4 +1,4 @@
-package de.dhbw.androne.view.shape;
+package de.dhbw.androne.view.shape.valuepicker;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -1,26 +1,27 @@
-package de.dhbw.androne.view.shape;
+package de.dhbw.androne.view.shape.valuepicker;
 
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
 import de.dhbw.androne.view.R;
+import de.dhbw.androne.view.shape.TriangleShapeView;
 
-public class RectangleValuePicker extends ValuePicker {
+public class TriangleValuePicker extends ValuePicker {
 
 	private int width, height, tmpWidth, tmpHeight;
-
+	
 	private static final int MIN_WIDTH = 2;
 	private static final int MIN_HEIGHT = 2;
 
-	private RectangleShapeView rectangleShapeView;
+	private TriangleShapeView triangleShapeView;
 	
 	
-	public void setShapeView(RectangleShapeView rectangleShapeView) {
-		this.rectangleShapeView = rectangleShapeView;
-		width = rectangleShapeView.getRectangleWidth();
-		height = rectangleShapeView.getRectangleHeight();
+	public void setShapeView(TriangleShapeView triangleShapeView) {
+		this.triangleShapeView = triangleShapeView;
+		width = triangleShapeView.getTriangleWidth();
+		height = triangleShapeView.getTriangleHeight();
 	}
-	
+
 	
 	@Override
 	protected View createDialog() {
@@ -34,7 +35,7 @@ public class RectangleValuePicker extends ValuePicker {
 		widthPicker.setMaxValue(shapeControlFragment.getVerticalLineCount() - 2);
 		widthPicker.setWrapSelectorWheel(false);
 		widthPicker.setLongClickable(false);
-		widthPicker.setValue(rectangleShapeView.getRectangleWidth());
+		widthPicker.setValue(triangleShapeView.getTriangleWidth());
 		widthPicker.setOnValueChangedListener(new OnValueChangeListener() {
 			@Override
 			public void onValueChange(NumberPicker arg0, int arg1, int arg2) {
@@ -47,7 +48,7 @@ public class RectangleValuePicker extends ValuePicker {
 		heightPicker.setMaxValue(shapeControlFragment.getHorizontalLineCount() - 2);
 		heightPicker.setWrapSelectorWheel(false);
 		heightPicker.setLongClickable(false);
-		heightPicker.setValue(rectangleShapeView.getRectangleHeight());
+		heightPicker.setValue(triangleShapeView.getTriangleHeight());
 		heightPicker.setOnValueChangedListener(new OnValueChangeListener() {
 			@Override
 			public void onValueChange(NumberPicker arg0, int arg1, int arg2) {
@@ -60,7 +61,7 @@ public class RectangleValuePicker extends ValuePicker {
 
 	@Override
 	protected void positiveOnClick() {
-		rectangleShapeView.setRectangle(width, height);
+		triangleShapeView.setTriangle(width, height);
 	}
 
 	@Override

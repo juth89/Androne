@@ -4,11 +4,13 @@ public class CircleShape implements Shape {
 
 	private double radius;
 	private boolean directionRight;
+	private int approximationSteps;
 
 	
-	public CircleShape(int radius, boolean directionRight) {
+	public CircleShape(int radius, boolean directionRight, int approximationSteps) {
 		this.radius = radius;
 		this.directionRight = directionRight;
+		this.approximationSteps = approximationSteps;
 	}
 	
 	
@@ -25,5 +27,10 @@ public class CircleShape implements Shape {
 	
 	public double getCircumference() {
 		return 2.0 * Math.PI * radius;
+	}
+	
+	
+	public int getApproximationSteps() {
+		return approximationSteps;
 	}
 }

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+import de.dhbw.androne.model.Shape;
 import de.dhbw.androne.view.R;
 
 public abstract class ShapeView extends View {
@@ -105,4 +106,5 @@ public abstract class ShapeView extends View {
 
 	protected abstract void drawValues();
 
+	public abstract Shape getShape();
 }

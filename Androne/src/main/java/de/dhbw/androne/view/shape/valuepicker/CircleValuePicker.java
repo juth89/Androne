@@ -1,9 +1,10 @@
-package de.dhbw.androne.view.shape;
+package de.dhbw.androne.view.shape.valuepicker;
 
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
 import de.dhbw.androne.view.R;
+import de.dhbw.androne.view.shape.CircleShapeView;
 
 public class CircleValuePicker extends ValuePicker {
 

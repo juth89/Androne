@@ -1,32 +1,48 @@
 package de.dhbw.androne.control;
 
+import java.io.IOException;
+
+import android.util.Log;
+
 import com.codeminders.ardrone.ARDrone;
-import de.dhbw.androne.model.*;
+import com.codeminders.ardrone.NavData;
+import com.codeminders.ardrone.NavDataListener;
 
-public class ShapeDroneControl {
+import de.dhbw.androne.model.CircleShape;
+import de.dhbw.androne.model.RectangleShape;
+import de.dhbw.androne.model.Shape;
+import de.dhbw.androne.model.TriangleShape;
 
+public class ShapeController implements NavDataListener {
+
+	private static final String TAG = "ShapeDroneControl";
+	
 	private ARDrone drone;
+	private boolean isFlyingShape = false;
+	
+	private long time;
+	private float vX, vZ;
 
 	private static final double NINTY_DEGREES = 90.0;
 	
 	
-	public ShapeDroneControl(ARDrone drone) {
+	public ShapeController(ARDrone drone) {
 		this.drone = drone;
 	}
 	
 	
 	public void flyShape(Shape shape) {
+		isFlyingShape = true;
 		if(shape instanceof RectangleShape) {
 			flyRectangle((RectangleShape) shape);
 			return;
-		} 
-		if(shape instanceof TriangleShape) {
+		} else if(shape instanceof TriangleShape) {
 			flyTriangle((TriangleShape) shape);
 			 return;
-		}
-		if(shape instanceof CircleShape) {
+		} else if(shape instanceof CircleShape) {
 			flyCircle((CircleShape) shape);
 		}
+		isFlyingShape = false;
 	}
 	
 	
@@ -83,20 +99,44 @@ public class ShapeDroneControl {
 	
 	
 	private void flyCircle(CircleShape circleShape) {
-		double radius = circleShape.getRadius();
 		boolean flyRight = circleShape.flyRight();
+		int approximationSteps = circleShape.getApproximationSteps();
 		double circumference = circleShape.getCircumference();
+
+		double forwardDistance = circumference / approximationSteps;
+		double angle = 360.0 / approximationSteps;
 		
-		int approximationLevel = 100;
-		
-		for(int i = 0; i < approximationLevel; i++) {
-			
+		for(int i = 0; i < approximationSteps; i++) {
+			forward(forwardDistance);
+			if(flyRight) {
+				rotateLeft(angle);
+			} else {
+				rotateRight(angle);
+			}
 		}
 	}
 	
 	
 	private void forward(double distance) {
+		double completeDistance = 0.0;
 		
+		while(completeDistance <= distance) {
+			
+			double flyedDistance = vX * (System.currentTimeMillis() - time);  
+			completeDistance += flyedDistance;
+
+			try {
+				Thread.sleep(5);
+			} catch(Exception e) {
+				Log.e(TAG, e.getMessage());
+			}
+		}
+		
+		try {
+			drone.hover();
+		} catch (IOException e) {
+			Log.e(TAG, e.getMessage());
+		}
 	}
 	
 	
@@ -107,5 +147,18 @@ public class ShapeDroneControl {
 	
 	private void rotateRight(double degree) {
 		
+	}
+
+
+	@Override
+	public void navDataReceived(NavData nd) {
+		time = System.currentTimeMillis();
+		vX = nd.getVx();
+		vZ = nd.getVz();
+	}
+
+	
+	public boolean isFlyingShape() {
+		return isFlyingShape;
 	}
 }

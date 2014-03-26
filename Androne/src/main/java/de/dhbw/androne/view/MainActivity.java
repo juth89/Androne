@@ -9,11 +9,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.codeminders.ardrone.ARDrone.State;
-
-import de.dhbw.androne.control.DroneControl;
+import de.dhbw.androne.control.DroneController;
+import de.dhbw.androne.control.values.DroneCommand;
 import de.dhbw.androne.view.adapter.TabsPagerAdapter;
+import de.dhbw.androne.view.updater.ControlUpdater;
 import de.dhbw.androne.view.viewpager.NonSwipeableViewPager;
 
 public class MainActivity extends FragmentActivity implements TabListener {
@@ -21,13 +20,12 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	private NonSwipeableViewPager viewPager;
 	private TabsPagerAdapter tabsPagerAdapter;
 	private ActionBar actionBar;
-	private Menu menu;
 	
 	private String[] tabNames = { "Direct", "Shape", "Polygon" };
 	
-	private DroneControl droneControl;
+	private DroneController droneController;
 	
-	private ControlUpdater uiUpdater;
+	private ControlUpdater controlUpdater;
 	
 	
 	@Override
@@ -48,19 +46,21 @@ public class MainActivity extends FragmentActivity implements TabListener {
 			actionBar.addTab(actionBar.newTab().setText(tabName).setTabListener(this));
 		}
 		
-		droneControl = new DroneControl(this);
-		Thread droneControlThread = new Thread(droneControl);
-		droneControlThread.start();
+		droneController = new DroneController(this);
+		Thread droneControllerThread = new Thread(droneController);
+		droneControllerThread.start();
 		
-		uiUpdater = new ControlUpdater(tabsPagerAdapter, droneControl);
+		controlUpdater = new ControlUpdater(tabsPagerAdapter, droneController, this);
+		Thread controlUpdaterThread = new Thread(controlUpdater);
+		controlUpdaterThread.start();
+		
 	}
 
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
-		this.menu = menu;
-		uiUpdater.setMenu(menu);
+		controlUpdater.setMenu(menu);
 		return true;
 	}
 	
@@ -70,17 +70,17 @@ public class MainActivity extends FragmentActivity implements TabListener {
 		switch(item.getItemId()){
 		case R.id.action_connect:
 			if(item.getTitle().equals(getResources().getString(R.string.action_connect))) {
-				droneControl.connect();
+				droneController.setCommand(DroneCommand.CONNECT);
 			} else {
-				droneControl.disconnect();
+				droneController.setCommand(DroneCommand.DISCONNECT);
 			}
 			return false;
 			
 		case R.id.action_take_off:
 			if(item.getTitle().equals(getResources().getString(R.string.action_take_off))) {
-				droneControl.takeOff();
+				droneController.setCommand(DroneCommand.TAKE_OFF);
 			} else {
-				droneControl.land();
+				droneController.setCommand(DroneCommand.LAND);
 			}
 			return false;
 			
@@ -98,14 +98,14 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		uiUpdater.updateMenu();
+		controlUpdater.updateMenu();
 		return true;
 	}
 	
 	
 	@Override
 	public void onDestroy() {
-		droneControl.stopThread();
+		droneController.stopThread();
 		super.onDestroy();
 	}
 	
@@ -144,17 +144,12 @@ public class MainActivity extends FragmentActivity implements TabListener {
 	 * Getter and setter
 	 */
 	
-	public DroneControl getDroneControl() {
-		return droneControl;
+	public DroneController getDroneControl() {
+		return droneController;
 	}
 
 	
-	public void updateDroneUi() {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				uiUpdater.updateDrone();
-			}
-		});
+	public void updateDroneUi(Runnable runnable) {
+		runOnUiThread(runnable);
 	}
 }

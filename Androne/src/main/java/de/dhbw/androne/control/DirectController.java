@@ -6,9 +6,9 @@ import android.util.Log;
 
 import com.codeminders.ardrone.ARDrone;
 
-public class DirectDroneControl {
+public class DirectController {
 
-	private static final String TAG = "DirectDroneControl";
+private static final String TAG = "DirectController";
 	
 	private static final float LEFT_RIGHT_TILT_SPEED = 1;
 	private static final float FRONT_BACK_TILT_SPEED = 1;
@@ -18,7 +18,7 @@ public class DirectDroneControl {
 	private ARDrone drone;
 
 	
-	public DirectDroneControl(ARDrone drone) {
+	public DirectController(ARDrone drone) {
 		this.drone = drone;
 	}
 
@@ -104,4 +104,5 @@ public class DirectDroneControl {
 			Log.e(TAG, "Stay problem", e);
 		}
 	}
+
 }

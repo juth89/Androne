@@ -1,5 +1,6 @@
 package de.dhbw.androne.view.shape;
 
+import de.dhbw.androne.model.Shape;
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -74,5 +75,12 @@ public class CircleShapeView extends ShapeView {
 	public void setCircleRadius(int circleRadius) {
 		this.circleRadius = circleRadius;
 		this.invalidate();
+	}
+
+	
+	@Override
+	public Shape getShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

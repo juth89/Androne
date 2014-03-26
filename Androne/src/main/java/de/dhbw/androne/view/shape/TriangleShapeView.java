@@ -1,5 +1,6 @@
 package de.dhbw.androne.view.shape;
 
+import de.dhbw.androne.model.Shape;
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -101,6 +102,13 @@ public class TriangleShapeView extends ShapeView {
 		this.triangleWidth = width;
 		this.triangleHeight = height;
 		this.invalidate();
+	}
+
+	
+	@Override
+	public Shape getShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

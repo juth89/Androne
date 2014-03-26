@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import de.dhbw.androne.control.DroneControl;
+import de.dhbw.androne.control.DroneController;
 
 public abstract class ControlFragment extends Fragment {
 
-	protected DroneControl droneControl;
+	protected DroneController droneController;
 	private TextView textViewAltitude, textViewState, textViewBattery;
 	
 	
@@ -18,7 +18,7 @@ public abstract class ControlFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
 		View view = createView(inflater, container);
 		
-		droneControl = ((MainActivity) getActivity()).getDroneControl();
+		droneController = ((MainActivity) getActivity()).getDroneControl();
 		
 		textViewAltitude = (TextView) view.findViewById(R.id.text_view_altitude);
 		textViewState = (TextView) view.findViewById(R.id.text_view_state);

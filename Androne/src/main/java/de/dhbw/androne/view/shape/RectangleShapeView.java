@@ -1,5 +1,6 @@
 package de.dhbw.androne.view.shape;
 
+import de.dhbw.androne.model.Shape;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.Paint.Align;
@@ -118,5 +119,12 @@ public class RectangleShapeView extends ShapeView {
 		this.rectangleWidth = width;
 		this.rectangleHeight = height;
 		this.invalidate();
+	}
+
+	
+	@Override
+	public Shape getShape() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
